@@ -2011,6 +2011,10 @@ class Jetpack_Core_Json_Api_Endpoints {
 	 */
 	public static function get_remote_value( $module, $option ) {
 
+		if ( in_array( $module, array( 'post-by-email' ), true ) ) {
+			$option .= get_current_user_id();
+		}
+
 		// If option doesn't exist, 'does_not_exist' will be returned.
 		$value = get_option( $option, 'does_not_exist' );
 
