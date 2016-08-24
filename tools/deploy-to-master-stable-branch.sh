@@ -41,6 +41,7 @@ echo ""
 
 echo "Building Jetpack"
 npm run distclean
+npm install
 NODE_ENV=production npm run build
 echo "Done"
 
