@@ -42,7 +42,7 @@ class Jetpack_Monitor {
 		}
 		if ( ! empty( $_POST['action'] ) && $_POST['action'] == 'monitor-save' ) {
 			check_admin_referer( 'monitor-settings' );
-			$enable_fields = array_intersect( array_keys( $_POST ), array( 'email', 'wp_note' ) );
+			$enable_fields = array_intersect( array_keys( $_POST ), array( 'email', 'wp_note', 'sms' ) );
 			$this->update_option_receive_jetpack_monitor_notification( $enable_fields );
 			Jetpack::state( 'message', 'module_configured' );
 			wp_safe_redirect( Jetpack::module_configuration_url( $this->module ) );
@@ -55,6 +55,7 @@ class Jetpack_Monitor {
 		$show_methods = array(
 			'email' => esc_html__( 'Receive Monitor Email Notifications.' , 'jetpack'),
 			'wp_note' => esc_html__( 'Receive Monitor WordPress Notifications.' , 'jetpack'),
+			'sms' => esc_html__( 'Receive Monitor SMS Notifications.' , 'jetpack'),
 		);
 		?>
 		<p><?php esc_html_e( 'Nobody likes downtime, and that\'s why Jetpack Monitor is on the job, keeping tabs on your site by checking it every five minutes. As soon as any downtime is detected, you will receive an email notification alerting you to the issue. That way you can act quickly, to get your site back online again!', 'jetpack' ); ?>

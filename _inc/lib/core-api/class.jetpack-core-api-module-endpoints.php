@@ -383,6 +383,11 @@ class Jetpack_Core_API_Module_Endpoint
 			$value = Jetpack_Core_Json_Api_Endpoints::cast_value( $value, $options[ $option ] );
 
 			switch ( $option ) {
+				case 'monitor_receive_sms':
+					$monitor_notification_updates[ 'sms' ] = $value;
+					$updated = true;
+					break;
+
 				case 'monitor_receive_wp_note':
 					$monitor_notification_updates[ 'wp_note' ] = $value;
 					$updated = true;

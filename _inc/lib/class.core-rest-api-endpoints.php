@@ -1098,7 +1098,13 @@ class Jetpack_Core_Json_Api_Endpoints {
 						'validate_callback'  => __CLASS__ . '::validate_boolean',
 					),
 					'monitor_receive_wp_note' => array(
-						'description'        => esc_html__( 'Receive Monitor Email Notifications.???', 'jetpack' ),
+						'description'        => esc_html__( 'Receive Monitor Email Notifications.', 'jetpack' ),
+						'type'               => 'boolean',
+						'default'            => 0,
+						'validate_callback'  => __CLASS__ . '::validate_boolean',
+					),
+					'monitor_receive_sms' => array(
+						'description'        => esc_html__( 'Receive Monitor SMS Notifications.', 'jetpack' ),
 						'type'               => 'boolean',
 						'default'            => 0,
 						'validate_callback'  => __CLASS__ . '::validate_boolean',
@@ -1864,6 +1870,7 @@ class Jetpack_Core_Json_Api_Endpoints {
 				}
 				$options['monitor_receive_email']['current_value'] = in_array( 'email', $user_methods );
 				$options['monitor_receive_wp_note']['current_value'] = in_array( 'wp_note', $user_methods );
+				$options['monitor_receive_sms']['current_value'] = in_array( 'sms', $user_methods );
 				break;
 
 			case 'post-by-email':

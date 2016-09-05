@@ -286,6 +286,10 @@ export let MonitorSettings = React.createClass( {
 						name={ 'monitor_receive_wp_note' }
 						{ ...this.props }
 						label={ __( 'Receive Monitor WordPress Notifications' ) } />
+					<ModuleSettingCheckbox
+						name={ 'monitor_receive_sms' }
+						{ ...this.props }
+						label={ __( 'Receive Monitor SMS' ) } />
 					<FormButton
 						className="is-primary"
 						isSubmitting={ this.props.isSavingAnyOption() }
