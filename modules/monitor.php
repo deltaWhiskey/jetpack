@@ -53,12 +53,12 @@ class Jetpack_Monitor {
 		$user_data = Jetpack::get_connected_user_data();
 		$methods = $this->get_notification_methods();
 		$show_methods = array(
-			'email' => esc_html__( 'Receive Monitor Email Notifications.' , 'jetpack'),
-			'wp_note' => esc_html__( 'Receive Monitor WordPress Notifications.' , 'jetpack'),
-			'sms' => esc_html__( 'Receive Monitor SMS Notifications.' , 'jetpack'),
+			'email' => esc_html__( 'Email' , 'jetpack'),
+			'wp_note' => esc_html__( 'WordPress Notification' , 'jetpack'),
+			'sms' => esc_html__( 'Sending a text message to my phone' , 'jetpack'),
 		);
 		?>
-		<p><?php esc_html_e( 'Nobody likes downtime, and that\'s why Jetpack Monitor is on the job, keeping tabs on your site by checking it every five minutes. As soon as any downtime is detected, you will receive an email notification alerting you to the issue. That way you can act quickly, to get your site back online again!', 'jetpack' ); ?>
+		<p><?php esc_html_e( 'Nobody likes downtime, and that\'s why Jetpack Monitor is on the job, keeping tabs on your site by checking it every five minutes. As soon as any downtime is detected, you will receive a notification alerting you to the issue. That way you can act quickly, to get your site back online again!', 'jetpack' ); ?>
 		<p><?php esc_html_e( 'We’ll also let you know as soon as your site is up and running, so you can keep an eye on total downtime.', 'jetpack'); ?></p>
 		<div class="narrow">
 		<?php if ( Jetpack::is_user_connected() && current_user_can( 'manage_options' ) ) : ?>
@@ -69,27 +69,50 @@ class Jetpack_Monitor {
 				<table id="menu" class="form-table">
 						<tr>
 						<th scope="row">
-							<?php _e( 'Notifications', 'jetpack' ); ?>
+							<?php _e( 'Notify me by:', 'jetpack' ); ?>
 						</th>
 						<td>
-							<?php foreach ( $show_methods as $slug => $label ) { ?>
-								<?php $field_id = 'receive_jetpack_monitor_notification_' . esc_attr( $slug ); ?>
+							<?php foreach ( $show_methods as $slug => $label ) {
+								$disabled = '';
+								$notes = '';
+								switch ( $slug ) {
+									case 'email':
+										$notes = sprintf(
+											__('Emails will be sent to %s (<a href="%s">Edit</a>)', 'jetpack' ),
+											esc_html( $user_data['email'] ),
+											'https://wordpress.com/settings/account/'
+										);
+										break;
+									case 'sms':
+										if ( $user_data['phone_number'] != '' ) {
+											// User has a verified phone number we can use.
+											$notes = sprintf(
+												__('SMS will be sent to %s (<a href="%s">Edit</a>)', 'jetpack' ),
+												esc_html( $user_data['phone_number'] ),
+												"javascript: alert('TODO');"
+											);
+										} else {
+											// Show "enter phone number" UI
+											$disabled = 'disabled';
+											$notes = sprintf(
+												__('A phone number must be provided to enable SMS (<a href="%s">Enter phone number</a>)', 'jetpack' ),
+												"javascript: alert('TODO');"
+											);
+										}
+										break;
+								}
+								$field_id = 'receive_jetpack_monitor_notification_' . esc_attr( $slug ); ?>
 								<label for="<?php echo $field_id; ?>">
 										<input type="checkbox" name="<?php echo esc_attr( $slug ); ?>"
 											id="<?php echo $field_id; ?>"
-											value="active"<?php checked( in_array( $slug, $methods ) ); ?> />
+											value="active"<?php checked( in_array( $slug, $methods ) ); ?>
+											<?php echo $disabled ?>/>
 									<span><?php echo( $label ) ?></span>
 								</label>
 								<p class="description">
-								<?php
-								if ( 'email' === $slug ) {
-									printf(
-										__('Emails will be sent to %s (<a href="%s">Edit</a>)', 'jetpack' ),
-										esc_html( $user_data['email'] ),
-										'https://wordpress.com/settings/account/'
-									);
-								}
-								?></p>
+								<?php echo $notes; ?>
+								</p>
+								<br/>
 							<?php } ?>
 						</td>
 					</tr>
