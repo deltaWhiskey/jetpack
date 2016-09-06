@@ -10,6 +10,7 @@ import TagsInput from 'components/tags-input';
 import ClipboardButtonInput from 'components/clipboard-button-input';
 import get from 'lodash/get';
 import Button from 'components/button';
+import Checkbox from 'components/checkbox';
 
 /**
  * Internal dependencies
@@ -265,13 +266,25 @@ ProtectSettings = moduleSettingsForm( ProtectSettings );
 
 export let MonitorSettings = React.createClass( {
 	render() {
+		const props = this.props;
+		var phoneNumberOk, phoneNote, phoneLink, phoneExplanation;
+		if ( 1 > props.adminPhoneNumber.length ) {
+			phoneNumberOk = false;
+			phoneExplanation = __( 'To enable SMS, ' );
+			phoneLink = __( '{{a}}enter phone number{{/a}}' );
+		} else {
+			phoneNumberOk = true;
+			phoneLink = __( '{{a}}Edit{{/a}}' );
+			phoneExplanation = __( 'SMS will be sent to ' ) + this.props.adminPhoneNumber;
+		}
+			
 		return (
 			<form onSubmit={ this.props.onSubmit } >
 				<FormFieldset>
 					<ModuleSettingCheckbox
 						name={ 'monitor_receive_email' }
 						{ ...this.props }
-						label={ __( 'Receive Monitor Email Notifications' ) } />
+						label={ __( 'Notify me by email' ) } />
 					<span className="jp-form-setting-explanation">{ __( 'Emails will be sent to ' ) + this.props.adminEmailAddress }. <span>
 						&nbsp;
 						{
@@ -285,11 +298,28 @@ export let MonitorSettings = React.createClass( {
 					<ModuleSettingCheckbox
 						name={ 'monitor_receive_wp_note' }
 						{ ...this.props }
-						label={ __( 'Receive Monitor WordPress Notifications' ) } />
-					<ModuleSettingCheckbox
-						name={ 'monitor_receive_sms' }
-						{ ...this.props }
-						label={ __( 'Receive Monitor SMS' ) } />
+						label={ __( 'Notify me by WordPress Notification' ) } />
+
+					<FormLabel>
+						<Checkbox
+							name={ 'monitor_receive_sms' }
+							checked={ !! props.getOptionValue( 'monitor_receive_sms' ) }
+							value={ !! props.getOptionValue( 'monitor_receive_sms' ) }
+							disabled={ ( props.isUpdating( 'monitor_receive_sms' ) || phoneNumberOk ) }
+							onChange= { props.onOptionChange } />
+						<span>{ __( 'Notify me by SMS' ) }</span>
+					</FormLabel>
+
+					<span className="jp-form-setting-explanation">{ phoneExplanation }<span>
+						&nbsp;
+						{
+							__( phoneLink, {
+								components: {
+									a: <a href={ 'https://wordpress.com/settings/account/' } />
+								}
+							} )
+						}
+					</span></span>
 					<FormButton
 						className="is-primary"
 						isSubmitting={ this.props.isSavingAnyOption() }

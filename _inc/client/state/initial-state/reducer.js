@@ -63,6 +63,10 @@ export function getAdminEmailAddress( state ) {
 	return get( state.jetpack.initialState, [ 'userData', 'currentUser', 'wpcomUser', 'email' ] );
 }
 
+export function getAdminPhoneNumber( state ) {
+	return get( state.jetpack.initialState, [ 'userData', 'currentUser', 'wpcomUser', 'phone_number' ] );
+}
+
 export function getSiteRawUrl( state ) {
 	return get( state.jetpack.initialState, 'rawUrl', {} );
 }
