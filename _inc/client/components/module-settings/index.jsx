@@ -266,17 +266,6 @@ ProtectSettings = moduleSettingsForm( ProtectSettings );
 
 export let MonitorSettings = React.createClass( {
 	render() {
-		const props = this.props;
-		var phoneNumberOk, phoneNote, phoneLink, phoneExplanation;
-		if ( 1 > props.adminPhoneNumber.length ) {
-			phoneNumberOk = false;
-			phoneExplanation = __( 'To enable SMS, ' );
-			phoneLink = __( '{{a}}enter phone number{{/a}}' );
-		} else {
-			phoneNumberOk = true;
-			phoneLink = __( '{{a}}Edit{{/a}}' );
-			phoneExplanation = __( 'SMS will be sent to ' ) + this.props.adminPhoneNumber;
-		}
 			
 		return (
 			<form onSubmit={ this.props.onSubmit } >
@@ -300,32 +289,56 @@ export let MonitorSettings = React.createClass( {
 						{ ...this.props }
 						label={ __( 'Notify me by WordPress Notification' ) } />
 
-					<FormLabel>
-						<Checkbox
-							name={ 'monitor_receive_sms' }
-							checked={ !! props.getOptionValue( 'monitor_receive_sms' ) }
-							value={ !! props.getOptionValue( 'monitor_receive_sms' ) }
-							disabled={ ( props.isUpdating( 'monitor_receive_sms' ) || phoneNumberOk ) }
-							onChange= { props.onOptionChange } />
-						<span>{ __( 'Notify me by SMS' ) }</span>
-					</FormLabel>
+					<MonitorSettingCheckboxPhone
+						name={ 'monitor_receive_sms' }
+						{ ...this.props }
+						label={ __( 'Notify me by SMS' ) } />
 
-					<span className="jp-form-setting-explanation">{ phoneExplanation }<span>
-						&nbsp;
-						{
-							__( phoneLink, {
-								components: {
-									a: <a href={ 'https://wordpress.com/settings/account/' } />
-								}
-							} )
-						}
-					</span></span>
 					<FormButton
 						className="is-primary"
 						isSubmitting={ this.props.isSavingAnyOption() }
 						disabled={ this.props.shouldSaveButtonBeDisabled() } />
 				</FormFieldset>
 			</form>
+		)
+	}
+} );
+
+export let MonitorSettingCheckboxPhone = React.createClass( {
+	render() {
+		const props = this.props;
+		var phoneNumberMissing, phoneNote, phoneLink, phoneExplanation;
+		if ( 1 > props.adminPhoneNumber.length ) {
+			phoneNumberMissing = true;
+			phoneExplanation = __( 'To enable SMS, ' );
+			phoneLink = __( '{{a}}enter phone number{{/a}}' );
+		} else {
+			phoneNumberMissing = false;
+			phoneLink = __( '{{a}}Edit{{/a}}' );
+			phoneExplanation = __( 'SMS will be sent to ' ) + this.props.adminPhoneNumber;
+		}
+
+		return (
+			<FormLabel>
+				<Checkbox
+					name={ props.name }
+					checked={ !! props.getOptionValue( props.name ) }
+					value={ !! props.getOptionValue( props.name ) }
+					disabled={ ( props.isUpdating( props.name ) || phoneNumberMissing ) }
+					onChange= { props.onOptionChange } />
+				<span>{ __( 'Notify me by SMS' ) }</span>
+
+			<span className="jp-form-setting-explanation">{ phoneExplanation }<span>
+				&nbsp;
+				{
+					__( phoneLink, {
+						components: {
+							a: <a href={ 'https://wordpress.com/settings/account/' } />
+						}
+					} )
+				}
+			</span></span>
+			</FormLabel>
 		)
 	}
 } );

@@ -1200,7 +1200,7 @@ class Jetpack {
 		$transient_key = "jetpack_connected_user_data_$user_id";
 
 		if ( $cached_user_data = get_transient( $transient_key ) ) {
-//			return $cached_user_data;
+			return $cached_user_data;
 		}
 
 		Jetpack::load_xml_rpc_client();
