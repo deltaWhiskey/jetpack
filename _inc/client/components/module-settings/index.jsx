@@ -274,7 +274,7 @@ export let MonitorSettings = React.createClass( {
 						name={ 'monitor_receive_email' }
 						{ ...this.props }
 						label={ __( 'Notify me by email' ) } />
-					<span className="jp-form-setting-explanation">{ __( 'Emails will be sent to ' ) + this.props.adminEmailAddress }. <span>
+					<span className="jp-form-setting-checkbox-explanation">{ __( 'Emails will be sent to ' ) + this.props.adminEmailAddress }. <span>
 						&nbsp;
 						{
 							__( '{{a}}Edit{{/a}}', {
@@ -288,6 +288,7 @@ export let MonitorSettings = React.createClass( {
 						name={ 'monitor_receive_wp_note' }
 						{ ...this.props }
 						label={ __( 'Notify me by WordPress Notification' ) } />
+					<br/>
 
 					<MonitorSettingCheckboxPhone
 						name={ 'monitor_receive_sms' }
@@ -307,14 +308,14 @@ export let MonitorSettings = React.createClass( {
 export let MonitorSettingCheckboxPhone = React.createClass( {
 	render() {
 		const props = this.props;
-		var phoneNumberMissing, phoneNote, phoneLink, phoneExplanation;
+		var phoneNumberMissing, phoneButtonText, phoneExplanation;
 		if ( 1 > props.adminPhoneNumber.length ) {
 			phoneNumberMissing = true;
-			phoneExplanation = __( 'To enable SMS, ' );
-			phoneLink = __( '{{a}}enter phone number{{/a}}' );
+			phoneExplanation = __( 'To enable SMS, please provide your phone number' );
+			phoneButtonText = __( 'Enter phone number' );
 		} else {
 			phoneNumberMissing = false;
-			phoneLink = __( '{{a}}Edit{{/a}}' );
+			phoneButtonText = __( 'Change phone number' );
 			phoneExplanation = __( 'SMS will be sent to ' ) + this.props.adminPhoneNumber;
 		}
 
@@ -328,18 +329,20 @@ export let MonitorSettingCheckboxPhone = React.createClass( {
 					onChange= { props.onOptionChange } />
 				<span>{ __( 'Notify me by SMS' ) }</span>
 
-			<span className="jp-form-setting-explanation">{ phoneExplanation }<span>
-				&nbsp;
-				{
-					__( phoneLink, {
-						components: {
-							a: <a href={ 'https://wordpress.com/settings/account/' } />
-						}
-					} )
-				}
-			</span></span>
+				<p className="jp-form-setting-checkbox-explanation">{ phoneExplanation }</p>
+				<p className="jp-form-setting-checkbox-explanation">
+					<Button
+						onClick={ this.doEet }
+						disabled={ false }>
+						{ phoneButtonText }
+					</Button>
+				</p>
 			</FormLabel>
 		)
+	},
+
+	doEet() {
+		alert('woot');
 	}
 } );
 

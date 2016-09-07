@@ -48,6 +48,11 @@
 	}
 }
 
+.jp-form-setting-checkbox-explanation {
+	@extend .jp-form-setting-explanation;
+	margin-left: 24px;
+}
+
 .jp-form-fieldset {
 
 	.jp-form-legend + .jp-form-setting-explanation {
