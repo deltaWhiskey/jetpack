@@ -11,6 +11,7 @@ import ClipboardButtonInput from 'components/clipboard-button-input';
 import get from 'lodash/get';
 import Button from 'components/button';
 import Checkbox from 'components/checkbox';
+import { createNotice, removeNotice } from 'components/global-notices/state/notices/actions';
 
 /**
  * Internal dependencies
@@ -306,6 +307,10 @@ export let MonitorSettings = React.createClass( {
 } );
 
 export let MonitorSettingCheckboxPhone = React.createClass( {
+	getInitialState() {
+		return { phoneFormStatus: 'inactive' };
+	},
+
 	render() {
 		const props = this.props;
 		var phoneNumberMissing, phoneButtonText, phoneExplanation;
@@ -329,10 +334,11 @@ export let MonitorSettingCheckboxPhone = React.createClass( {
 					onChange= { props.onOptionChange } />
 				<span>{ __( 'Notify me by SMS' ) }</span>
 
+				{ this.state.testy ? <p>TRUE</p> : <p>FALSE</p> }
 				<p className="jp-form-setting-checkbox-explanation">{ phoneExplanation }</p>
 				<p className="jp-form-setting-checkbox-explanation">
 					<Button
-						onClick={ this.doEet }
+						onClick={ this.showPhoneNumberInput }
 						disabled={ false }>
 						{ phoneButtonText }
 					</Button>
@@ -341,8 +347,24 @@ export let MonitorSettingCheckboxPhone = React.createClass( {
 		)
 	},
 
-	doEet() {
-		alert('woot');
+	setPhoneFormStatus( newStatus ) {
+		switch ( newStatus ) {
+			case 'phone_process':
+				// TODO send phone # to server
+				break;
+			case 'code_process':
+				// TODO send code to server
+				break;
+			case 'inactive':
+			case 'phone_entry':
+			case 'code_entry':
+			default:
+				// No special steps required.
+		}
+		this.setState( { phoneFormStatus : newStatus } );
+
+		// TODO add net calls to _inc/client/rest-api/index.js
+		// call like: restApi.setApiRoot( this.props.apiRoot );
 	}
 } );
 
