@@ -227,6 +227,16 @@ function JetpackRestApiClient( root, nonce ) {
 				'Content-type': 'application/json'
 			}
 		} )
+		.then( checkStatus ).then( response => response.json() ),
+		sendPhoneConfirmationCode: ( updatedSetting ) => fetch( `${ apiRoot }jetpack/v4/phone_confirmation/send`, {
+			method: 'post',
+			credentials: 'same-origin',
+			headers: {
+				'X-WP-Nonce': apiNonce,
+				'Content-type': 'application/json'
+			},
+			body: JSON.stringify( updatedSetting )
+		} )
 		.then( checkStatus ).then( response => response.json() )
 	}
 

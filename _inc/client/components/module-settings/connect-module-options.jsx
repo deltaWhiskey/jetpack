@@ -11,7 +11,8 @@ import {
 	getModuleOption,
 	getModuleOptionValidValues,
 	isUpdatingModuleOption,
-	regeneratePostByEmailAddress
+	regeneratePostByEmailAddress,
+	sendPhoneConfirmationCode
 } from 'state/modules';
 
 import {
@@ -45,6 +46,9 @@ export function connectModuleOptions( Component ) {
 			},
 			regeneratePostByEmailAddress: () => {
 				return dispatch( regeneratePostByEmailAddress() );
+			},
+			sendPhoneConfirmationCode: ( phone_number ) => {
+				return dispatch( sendPhoneConfirmationCode( phone_number ) );
 			}
 		} )
 	)( Component );

@@ -103,6 +103,20 @@ class Jetpack_Core_Json_Api_Endpoints {
 			'permission_callback' => __CLASS__ . '::view_admin_page_permission_check',
 		) );
 
+		// Send confirmation code to telephone
+		register_rest_route( 'jetpack/v4', '/phone_confirmation/send', array(
+			'methods' => WP_REST_Server::EDITABLE,
+			'callback' => __CLASS__ . '::phone_confirmation_send',
+			'permission_callback' => __CLASS__ . '::manage_modules_permission_check',
+		) );
+
+		// Check telephone confirmation code
+		register_rest_route( 'jetpack/v4', '/phone_confirmation/check', array(
+			'methods' => WP_REST_Server::EDITABLE,
+			'callback' => __CLASS__ . '::phone_confirmation_check',
+			'permission_callback' => __CLASS__ . '::manage_modules_permission_check',
+		) );
+
 		// Return all modules
 		self::route(
 			'module/all',
@@ -656,6 +670,28 @@ class Jetpack_Core_Json_Api_Endpoints {
 		}
 
 		return new WP_Error( 'site_id_missing', esc_html__( 'The ID of this site does not exist.', 'jetpack' ), array( 'status' => 404 ) );
+	}
+
+	/**
+	 * Ask .com to send an SMS confirmation code to a phone number.
+	 *
+	 * @return boolean true on success
+	 */
+	public static function phone_confirmation_send( $data ) {
+		$params = $data->get_json_params();
+		error_log($params); // TODO
+		return false;
+	}
+
+	/**
+	 * Ask .com to check a phone confirmation code.
+	 *
+	 * @return boolean true if code matches
+	 */
+	public static function phone_confirmation_check( $data ) {
+		$params = $data->get_json_params();
+		error_log($params); // TODO
+		return true;
 	}
 
 

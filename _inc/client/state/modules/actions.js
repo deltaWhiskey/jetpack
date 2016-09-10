@@ -234,6 +234,20 @@ export const updateModuleOptions = ( slug, newOptionValues ) => {
 	}
 }
 
+export const sendPhoneConfirmationCode = ( phone_number ) => {
+	return ( dispatch, getState ) => {
+		dispatch( createNotice(
+			'is-info',
+			'Message goes here',
+			{ id: 'send-phone-confirmation-code' }
+		) );
+console.log('SENDING: '+phone_number);
+		restApi.sendPhoneConfirmationCode( phone_number )
+		.then( response => { console.log( response ) } );
+
+	};
+}
+
 export const regeneratePostByEmailAddress = () => {
 	const slug = 'post-by-email';
 	const payload = {

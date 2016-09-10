@@ -11,7 +11,7 @@ import ClipboardButtonInput from 'components/clipboard-button-input';
 import get from 'lodash/get';
 import Button from 'components/button';
 import Checkbox from 'components/checkbox';
-import { createNotice, removeNotice } from 'components/global-notices/state/notices/actions';
+
 
 /**
  * Internal dependencies
@@ -267,7 +267,6 @@ ProtectSettings = moduleSettingsForm( ProtectSettings );
 
 export let MonitorSettings = React.createClass( {
 	render() {
-			
 		return (
 			<form onSubmit={ this.props.onSubmit } >
 				<FormFieldset>
@@ -307,8 +306,20 @@ export let MonitorSettings = React.createClass( {
 } );
 
 export let MonitorSettingCheckboxPhone = React.createClass( {
+
+	sendPhoneConfirmationCode( event ) {
+		event.preventDefault();
+		this.setState( { processing : true } );
+		this.props.sendPhoneConfirmationCode( 'BOOM' );
+
+		// TODO clear processing state, move to next input maybe.
+	},
+
 	getInitialState() {
-		return { phoneFormStatus: 'inactive' };
+		return {
+			phoneFormStatus: 'inactive',
+			processing: false
+		};
 	},
 
 	render() {
@@ -334,11 +345,10 @@ export let MonitorSettingCheckboxPhone = React.createClass( {
 					onChange= { props.onOptionChange } />
 				<span>{ __( 'Notify me by SMS' ) }</span>
 
-				{ this.state.testy ? <p>TRUE</p> : <p>FALSE</p> }
 				<p className="jp-form-setting-checkbox-explanation">{ phoneExplanation }</p>
 				<p className="jp-form-setting-checkbox-explanation">
 					<Button
-						onClick={ this.showPhoneNumberInput }
+						onClick={ this.sendPhoneConfirmationCode }
 						disabled={ false }>
 						{ phoneButtonText }
 					</Button>
@@ -346,26 +356,6 @@ export let MonitorSettingCheckboxPhone = React.createClass( {
 			</FormLabel>
 		)
 	},
-
-	setPhoneFormStatus( newStatus ) {
-		switch ( newStatus ) {
-			case 'phone_process':
-				// TODO send phone # to server
-				break;
-			case 'code_process':
-				// TODO send code to server
-				break;
-			case 'inactive':
-			case 'phone_entry':
-			case 'code_entry':
-			default:
-				// No special steps required.
-		}
-		this.setState( { phoneFormStatus : newStatus } );
-
-		// TODO add net calls to _inc/client/rest-api/index.js
-		// call like: restApi.setApiRoot( this.props.apiRoot );
-	}
 } );
 
 MonitorSettings = moduleSettingsForm( MonitorSettings );
